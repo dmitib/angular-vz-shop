@@ -16,6 +16,7 @@ export class CartComponent implements OnInit {
 
   ngOnInit() {
     this.items = this.service.getItems();
+    // желательно  сохранить подписку и затем ее убрать
     this.service.getSum()
       .subscribe(sum => this.cartSum = sum);
   }
