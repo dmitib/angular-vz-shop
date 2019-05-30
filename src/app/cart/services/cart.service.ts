@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+
+// rxjs
 import { BehaviorSubject } from 'rxjs';
 
 import { CartItem } from '../models/cart-item.model';
@@ -38,8 +40,17 @@ export class CartService {
     this.items = [];
   }
 
+  changeCount(item: CartItem) {
+    const cartItemIndex = this.items.findIndex(i => i.name === item.name);
+
+    if (cartItemIndex !== -1) {
+      this.items[cartItemIndex].count = item.count;
+    }
+  }
+
   removeItem(item: CartItem) {
     const cartItemIndex = this.items.findIndex(i => i.name === item.name);
+
     if (cartItemIndex !== -1) {
       this.items.splice(cartItemIndex, 1);
     }
@@ -47,5 +58,9 @@ export class CartService {
 
   getCartSum(): number {
     return this.items.reduce((sum, item) => sum += item.price * item.count, 0);
+  }
+
+  getCartCount(): number {
+    return this.items.reduce((count, item) => count += item.count, 0);
   }
 }

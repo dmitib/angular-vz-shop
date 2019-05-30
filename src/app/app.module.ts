@@ -4,18 +4,23 @@ import { AngularFireModule } from '@angular/fire';
 
 import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
-import { ProductComponent, ProductListComponent } from './products';
-import { CartComponent } from './cart';
+import { CartModule } from './cart/cart.module';
+import { OrdersModule } from './orders/orders.module';
+import { CoreModule } from './core/core.module';
+import { SharedModule } from './shared/shared.module';
+import { ProductsModule } from './products/products.module';
 
 @NgModule({
   declarations: [
-    AppComponent,
-    ProductComponent,
-    ProductListComponent,
-    CartComponent
+    AppComponent
   ],
   imports: [
     BrowserModule,
+    CartModule,
+    ProductsModule,
+    OrdersModule,
+    CoreModule,
+    SharedModule,
     AngularFireModule.initializeApp(environment.firebase)
   ],
   providers: [],

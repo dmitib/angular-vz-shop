@@ -1,4 +1,4 @@
-<h1>List of products:</h1>
+<h2>List of products:</h2>
 <div class="row">
   <div class="col-sm-4 py-2" *ngIf="!products || products.length === 0; else productSummary">
     Waiting for supplies...
@@ -8,6 +8,7 @@
       <app-product
         [product] = product
         (addToCart)="onAddToCart($event)"
+        (countChange)="onChangeCount($event)"
       ></app-product>
     </div>
   </ng-template>

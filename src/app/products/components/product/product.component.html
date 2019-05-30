@@ -1,12 +1,13 @@
-<div class="card h-100 card-body">
+<div class="card h-100 card-body" appHighlight [ngClass]="{'not-available': !product.isAvailable}">
   <h5 class="card-title">name: {{product.name}}</h5>
   <p class="card-text">description: {{product.description}}</p>
   <p class="card-text">category: {{product.category}}</p>
   <p class="card-text">is available: {{product.isAvailable}}</p>
   <p class="card-text">price: {{product.price}}</p>
+  <p class="card-text">last time action: {{lastTimeAction() | date: 'medium'}}</p>
   <button
     class="btn btn-primary"
-    *ngIf="product.isAvailable"
-    (click)="onAddToCart($event)"
+    [disabled]="!product.isAvailable"
+    (click)="onAddToCart()"
   >Add to cart</button>
 </div>

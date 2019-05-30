@@ -1,0 +1,15 @@
+<td>{{ item.name }} <br> <i>{{ item.description }}</i></td>
+<td>{{ item.price }}</td>
+<td>
+  <button class="btn" (click)="onChangeCount(-1)">-</button>
+  <span>{{ item.count }}</span>
+  <button class="btn" (click)="onChangeCount(1)">+</button>
+</td>
+<td>{{ item.count * item.price }}</td>
+<td class="text-center">
+  <button
+    class="btn btn-danger btn-xs"
+    type="button"
+    (click)="onRemoveItem(item)"
+  >Remove</button>
+</td>

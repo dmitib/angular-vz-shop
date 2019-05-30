@@ -1,2 +1,2 @@
-export * from './cart.component';
+export * from './components';
 export * from './services';
