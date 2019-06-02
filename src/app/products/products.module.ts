@@ -8,7 +8,8 @@ import { ProductsService } from './services';
 @NgModule({
   declarations: [ProductComponent, ProductListComponent],
   imports: [CommonModule, SharedModule],
-  providers: [ProductsService],
+  // Сервис уже зарегистрирован
+  // providers: [ProductsService],
   exports: [ProductListComponent]
 })
 export class ProductsModule {}

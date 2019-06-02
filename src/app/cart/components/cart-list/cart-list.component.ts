@@ -20,6 +20,8 @@ export class CartListComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    // На мой взгляд это решение не очень, так как внизу создается Observable и тут тоже.
+    // Чем плохо сохранить подписку и потом отписаться?
     this.cartService.getSum().unsubscribe();
   }
 
@@ -41,8 +43,9 @@ export class CartListComponent implements OnInit, OnDestroy {
 
   private updateView() {
     this.items = this.cartService.getItems();
-    this.cartTotalSum = this.cartService.getCartSum();
+    // Не понял почему одному и тому же свойству устанавливаются разные значения
+    this.cartTotalSum /** <--- */= this.cartService.getCartSum();
     this.cartService.getSum()
-      .subscribe(sum => this.cartTotalSum = sum);
+      .subscribe(sum => this.cartTotalSum /** <--- */ = sum);
   }
 }
