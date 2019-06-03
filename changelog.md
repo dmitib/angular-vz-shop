@@ -1,18 +1,25 @@
 # Changelog
 
 ## Task 1
-* Add CartComponent, CartService, CartModel.
-* Add product list component.
-* Add 'Add to cart' button to Product component.
-* Update product component with mock data.
-* Add product component.
 * Initial commit for shop project.
+* Added CartComponent, CartService, CartModel.
+* Added product list component.
+* Added 'Add to cart' button to Product component.
+* Updated product component with mock data.
+* Added product component.
 
 ## Task 2
-* Add highlight directive and apply it to the products component (@HostBinding, @HostListener).
-* Create modules for: Products, Cart, Orders, Core, Shared.
+* Added highlight directive and applied it to the products component (@HostBinding, @HostListener).
+* Created modules for: Products, Cart, Orders, Core, Shared.
 * Divided cart component on cart-list & cart-item.
-* Add app title to the AppComponent (@ViewChild).
-* Add OnPush change strategy to the ProductComponent.
-* Initial commit for shop project.
-* Use ngClass for add Class to element.
+* Added app title to the AppComponent (@ViewChild).
+* Added OnPush change strategy to the ProductComponent.
+* Used ngClass for add Class to element.
+
+## Task 3
+* Added LocalStorageService and 3 methods (setItem, getItem, removeItem).
+* Added ConfigOptionsService and 2 methods (setConfig, getConfig).
+* Added ConstantsService and registered using "useValue".
+* Added GeneratorService for generating random sequence of symbols (consist from following set: a-z, A-Z, 0-9).
+* Added AboutComponent and have been injected services above (LocalStorageService, ConfigOptionsService, ConstantsService, GeneratorService) using "@Optional()".
+* Added "change background" directive and applied it to the cart-item component using "ElementRef/Renderer2".

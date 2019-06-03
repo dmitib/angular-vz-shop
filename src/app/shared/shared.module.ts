@@ -1,14 +1,17 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { HighlightDirective } from './directives';
+
+import { HighlightDirective, BackgroundDirective } from './directives';
 
 @NgModule({
   declarations: [
-    HighlightDirective
+    HighlightDirective,
+    BackgroundDirective
   ],
   imports: [CommonModule],
   exports: [
-    HighlightDirective
+    HighlightDirective,
+    BackgroundDirective
   ]
 })
 export class SharedModule {}

@@ -9,6 +9,7 @@ import { OrdersModule } from './orders/orders.module';
 import { CoreModule } from './core/core.module';
 import { SharedModule } from './shared/shared.module';
 import { ProductsModule } from './products/products.module';
+import { LayoutModule } from './layout/layout.module';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { ProductsModule } from './products/products.module';
     OrdersModule,
     CoreModule,
     SharedModule,
+    LayoutModule,
     AngularFireModule.initializeApp(environment.firebase)
   ],
   providers: [],
