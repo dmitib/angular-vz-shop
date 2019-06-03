@@ -1,4 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
+
 import { CartItem } from '../../models/cart-item.model';
 import { CartService } from '../../services/cart.service';
 
@@ -10,19 +12,25 @@ import { CartService } from '../../services/cart.service';
 export class CartListComponent implements OnInit, OnDestroy {
   items: CartItem[];
   cartTotalSum: number;
-  cartCount: number;
-  cartSum: number;
+  cartTotalCount: number;
+
+  private getSumSubscribe: Subscription;
+  private getCountSubscribe: Subscription;
 
   constructor(private cartService: CartService) { }
 
   ngOnInit() {
+    this.getSumSubscribe = this.cartService.getSum()
+      .subscribe(sum => this.cartTotalSum = sum);
+    this.getCountSubscribe = this.cartService.getCount()
+      .subscribe(count => this.cartTotalCount = count);
+
     this.updateView();
   }
 
   ngOnDestroy() {
-    // На мой взгляд это решение не очень, так как внизу создается Observable и тут тоже.
-    // Чем плохо сохранить подписку и потом отписаться?
-    this.cartService.getSum().unsubscribe();
+    this.getSumSubscribe.unsubscribe();
+    this.getCountSubscribe.unsubscribe();
   }
 
   emptyCart() {
@@ -32,20 +40,15 @@ export class CartListComponent implements OnInit, OnDestroy {
 
   removeItem(item: CartItem) {
     this.cartService.removeItem(item);
-    this.updateView();
+    this.changeCount(item);
   }
 
   changeCount(item: CartItem) {
-    this.cartService.changeCount(item);
     this.cartService.changeCount(item);
     this.updateView();
   }
 
   private updateView() {
     this.items = this.cartService.getItems();
-    // Не понял почему одному и тому же свойству устанавливаются разные значения
-    this.cartTotalSum /** <--- */= this.cartService.getCartSum();
-    this.cartService.getSum()
-      .subscribe(sum => this.cartTotalSum /** <--- */ = sum);
   }
 }

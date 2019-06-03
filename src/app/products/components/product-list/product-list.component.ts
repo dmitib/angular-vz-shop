@@ -12,6 +12,7 @@ import { ProductModel } from '../../models/product.model';
 export class ProductListComponent implements OnInit {
   products: ProductModel[];
   cartSum: number;
+  cartCount: number;
 
   constructor(
     private productsService: ProductsService,
@@ -32,5 +33,8 @@ export class ProductListComponent implements OnInit {
 
     this.cartSum = this.cartService.getCartSum();
     this.cartService.setSum(this.cartSum);
+
+    this.cartCount = this.cartService.getCartCount();
+    this.cartService.setCount(this.cartCount);
   }
 }

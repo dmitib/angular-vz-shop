@@ -11,7 +11,8 @@ import { CartItem } from '../models/cart-item.model';
 export class CartService {
   private items: CartItem[] = [];
 
-  cartSum: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+  cartSum$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+  cartCount$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
 
   constructor() { }
 
@@ -20,11 +21,15 @@ export class CartService {
   }
 
   setSum(sum: number) {
-    this.cartSum.next(sum);
+    this.cartSum$.next(sum);
   }
 
   getSum() {
-    return this.cartSum;
+    return this.cartSum$;
+  }
+
+  getCartSum(): number {
+    return this.items.reduce((sum, item) => sum += item.price * item.count, 0);
   }
 
   addToCart(item: CartItem) {
@@ -46,6 +51,9 @@ export class CartService {
     if (cartItemIndex !== -1) {
       this.items[cartItemIndex].count = item.count;
     }
+
+    this.setSum(this.getCartSum());
+    this.setCount(this.getCartCount());
   }
 
   removeItem(item: CartItem) {
@@ -56,8 +64,12 @@ export class CartService {
     }
   }
 
-  getCartSum(): number {
-    return this.items.reduce((sum, item) => sum += item.price * item.count, 0);
+  setCount(count: number) {
+    this.cartCount$.next(count);
+  }
+
+  getCount() {
+    return this.cartCount$;
   }
 
   getCartCount(): number {
