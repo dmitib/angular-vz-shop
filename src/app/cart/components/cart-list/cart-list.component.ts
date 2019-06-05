@@ -14,21 +14,27 @@ export class CartListComponent implements OnInit, OnDestroy {
   cartTotalSum: number;
   cartTotalCount: number;
 
+  // Можно создать одну подписку, а следующие добавлять как дочерние
+  // this.sub.add(anotherSub)
   private getSumSubscribe: Subscription;
   private getCountSubscribe: Subscription;
 
-  constructor(private cartService: CartService) { }
+  constructor(private cartService: CartService) {}
 
   ngOnInit() {
-    this.getSumSubscribe = this.cartService.getSum()
-      .subscribe(sum => this.cartTotalSum = sum);
-    this.getCountSubscribe = this.cartService.getCount()
-      .subscribe(count => this.cartTotalCount = count);
+    this.getSumSubscribe = this.cartService
+      .getSum()
+      .subscribe(sum => (this.cartTotalSum = sum));
+    this.getCountSubscribe = this.cartService
+      .getCount()
+      .subscribe(count => (this.cartTotalCount = count));
 
     this.updateView();
   }
 
   ngOnDestroy() {
+    // Можно отписаться только от основной, дочерние автоматически отпишутся
+    // thi.sub.unsibscribe();
     this.getSumSubscribe.unsubscribe();
     this.getCountSubscribe.unsubscribe();
   }

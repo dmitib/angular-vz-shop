@@ -3,15 +3,11 @@ import { NgModule } from '@angular/core';
 
 import { HighlightDirective, BackgroundDirective } from './directives';
 
+// Так будет короче
+const decl = [HighlightDirective, BackgroundDirective];
 @NgModule({
-  declarations: [
-    HighlightDirective,
-    BackgroundDirective
-  ],
+  declarations: [...decl],
   imports: [CommonModule],
-  exports: [
-    HighlightDirective,
-    BackgroundDirective
-  ]
+  exports: [...decl]
 })
 export class SharedModule {}
