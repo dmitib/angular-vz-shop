@@ -1,5 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs';
+
+// RxJs
+import { Subscription, combineLatest } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { CartItem } from '../../models/cart-item.model';
 import { CartService } from '../../services/cart.service';
@@ -13,30 +16,22 @@ export class CartListComponent implements OnInit, OnDestroy {
   items: CartItem[];
   cartTotalSum: number;
   cartTotalCount: number;
-
-  // Можно создать одну подписку, а следующие добавлять как дочерние
-  // this.sub.add(anotherSub)
-  private getSumSubscribe: Subscription;
-  private getCountSubscribe: Subscription;
+  private sub: Subscription = new Subscription();
 
   constructor(private cartService: CartService) {}
 
   ngOnInit() {
-    this.getSumSubscribe = this.cartService
-      .getSum()
-      .subscribe(sum => (this.cartTotalSum = sum));
-    this.getCountSubscribe = this.cartService
-      .getCount()
-      .subscribe(count => (this.cartTotalCount = count));
-
+    this.sub.add(this.cartService
+        .getSum()
+        .subscribe(sum => (this.cartTotalSum = sum)));
+    this.sub.add(this.cartService
+        .getCount()
+        .subscribe(count => (this.cartTotalCount = count)));
     this.updateView();
   }
 
   ngOnDestroy() {
-    // Можно отписаться только от основной, дочерние автоматически отпишутся
-    // thi.sub.unsibscribe();
-    this.getSumSubscribe.unsubscribe();
-    this.getCountSubscribe.unsubscribe();
+    this.sub.unsubscribe();
   }
 
   emptyCart() {
