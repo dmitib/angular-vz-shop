@@ -2,10 +2,10 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 
 // RxJs
 import { Subscription, combineLatest } from 'rxjs';
-import { map } from 'rxjs/operators';
 
 import { CartItem } from '../../models/cart-item.model';
 import { CartService } from '../../services/cart.service';
+import { OptionSort } from 'src/app/shared/pipes/order-by.pipe';
 
 @Component({
   selector: 'app-cart-list',
@@ -17,16 +17,18 @@ export class CartListComponent implements OnInit, OnDestroy {
   cartTotalSum: number;
   cartTotalCount: number;
   private sub: Subscription = new Subscription();
+  selectedSorting: OptionSort = 'name';
+  isDescending = false;
 
   constructor(private cartService: CartService) {}
 
   ngOnInit() {
     this.sub.add(this.cartService
-        .getSum()
-        .subscribe(sum => (this.cartTotalSum = sum)));
+      .getSum()
+      .subscribe(sum => (this.cartTotalSum = sum)));
     this.sub.add(this.cartService
-        .getCount()
-        .subscribe(count => (this.cartTotalCount = count)));
+      .getCount()
+      .subscribe(count => (this.cartTotalCount = count)));
     this.updateView();
   }
 

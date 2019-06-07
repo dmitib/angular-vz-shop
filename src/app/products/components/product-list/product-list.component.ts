@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import { ProductsService } from '../../services/products.service';
 import { CartService } from '../../../cart/services/cart.service';
@@ -10,9 +10,11 @@ import { ProductModel } from '../../models/product.model';
   styleUrls: ['./product-list.component.scss']
 })
 export class ProductListComponent implements OnInit {
-  products: ProductModel[];
+  products: Promise<ProductModel[]>;
   cartSum: number;
   cartCount: number;
+  isLoading = true;
+  isEmpty = false;
 
   constructor(
     private productsService: ProductsService,
@@ -21,6 +23,8 @@ export class ProductListComponent implements OnInit {
 
   ngOnInit() {
     this.products = this.productsService.getProducts();
+    this.products.finally(() => this.isLoading = false);
+    this.products.then(products => products.length ? products : this.isEmpty = true);
   }
 
   onAddToCart(product: ProductModel) {

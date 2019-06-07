@@ -1,9 +1,7 @@
-import { Category } from './category';
-
 export class ProductModel {
   name: string;
   description: string;
   price: number;
-  category: Category;
+  category: string;
   isAvailable: boolean;
 }

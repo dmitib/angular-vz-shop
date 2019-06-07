@@ -5,6 +5,19 @@
       Your cart is empty.
     </div>
     <ng-template #cartSummary>
+      <div *ngIf="items.length > 1;" class="row d-flex sort">
+        <div class="col-sm-2">
+          <select class="form-control" [(ngModel)]="selectedSorting">
+            <option value="name">By name</option>
+            <option value="price">By price</option>
+            <option value="sum">By sum</option>
+          </select>
+        </div>
+        <div class="custom-control custom-checkbox mr-sm-2 sort__checkbox">
+          <input id="sort-descending" [(ngModel)]="isDescending" type="checkbox" class="custom-control-input">
+          <label class="custom-control-label" for="sort-descending">Descending order</label>
+        </div>
+      </div>
       <table class="table table-striped table--cart-summary">
         <tr>
           <th>Name / Description</th>
@@ -14,7 +27,7 @@
           <th class="text-center">Action</th>
         </tr>
         <tr
-          *ngFor="let item of items"
+          *ngFor="let item of (items | orderBy: selectedSorting: isDescending)"
           app-cart-item
           [item]="item"
           (itemRemove)="removeItem($event)"
@@ -30,7 +43,7 @@
           (click)="emptyCart()"
         >Empty cart</button>
         <div class="sum"><b>Total count:</b> {{ cartTotalCount }}</div>
-        <div class="sum"><b>Total sum:</b> {{ cartTotalSum }}</div>
+        <div class="sum"><b>Total sum:</b> {{ cartTotalSum | currency:'RUB':'symbol-narrow'}}</div>
       </div>
     </ng-template>
   </div>

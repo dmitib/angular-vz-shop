@@ -1,10 +1,10 @@
 <div class="card h-100 card-body" appHighlight [ngClass]="{'not-available': !product.isAvailable}">
-  <h5 class="card-title">name: {{product.name}}</h5>
+  <h5 class="card-title">name: {{product.name | titlecase}}</h5>
   <p class="card-text">description: {{product.description}}</p>
-  <p class="card-text">category: {{product.category}}</p>
+  <p class="card-text">category: {{product.category | uppercase}}</p>
   <p class="card-text">is available: {{product.isAvailable}}</p>
-  <p class="card-text">price: {{product.price}}</p>
-  <p class="card-text">last time action: {{lastTimeAction() | date: 'medium'}}</p>
+  <p class="card-text">price: {{product.price | currency:'RUB':'symbol-narrow'}}</p>
+  <p class="card-text">last time action: {{lastTimeAction() | date: 'MMMM d, y, HH:mm:ss'}}</p>
   <button
     class="btn btn-primary"
     [disabled]="!product.isAvailable"
