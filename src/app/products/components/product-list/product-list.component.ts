@@ -23,8 +23,11 @@ export class ProductListComponent implements OnInit {
 
   ngOnInit() {
     this.products = this.productsService.getProducts();
-    this.products.finally(() => this.isLoading = false);
-    this.products.then(products => products.length ? products : this.isEmpty = true);
+    // Можно в цепочке написать
+    // this.products.finally(() => this.isLoading = false);
+    this.products
+      .then(products => products.length ? products : this.isEmpty = true)
+      .finally(() => this.isLoading = false);
   }
 
   onAddToCart(product: ProductModel) {
