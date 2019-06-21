@@ -1,0 +1,41 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4 class="pannel-title">
+      Edit order
+    </h4>
+    </div>
+    <div class="panel-body">
+      <form (ngSubmit)="onSave()" #form="ngForm">
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input
+            type="text"
+            class="form-control"
+            id="name"
+            name="name"
+            placeholder="Name"
+            required
+            [(ngModel)]="order.name"
+          />
+        </div>
+        <div class="form-group">
+          <label for="delivery-address">Delivery address</label>
+          <input
+            type="text"
+            class="form-control"
+            id="delivery-address"
+            name="deliveryAddress"
+            placeholder="Delivery address"
+            required
+            [(ngModel)]="order.deliveryAddress"
+          />
+        </div>
+        <button type="submit" class="btn btn-primary" [disabled]="form.invalid">
+          Save
+        </button>
+        <button class="btn" type="button" (click)="onGoBack()">
+          Back
+        </button>
+      </form>
+    </div>
+  </div>

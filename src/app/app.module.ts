@@ -10,10 +10,15 @@ import { CoreModule } from './core/core.module';
 import { SharedModule } from './shared/shared.module';
 import { ProductsModule } from './products/products.module';
 import { LayoutModule } from './layout/layout.module';
+import { AppRoutingModule } from './app-routing.module';
+import { PathNotFoundComponent } from './shared/components/path-not-found/path-not-found.component';
+import { LoginComponent } from './shared/components/login/login.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    PathNotFoundComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -23,9 +28,10 @@ import { LayoutModule } from './layout/layout.module';
     CoreModule,
     SharedModule,
     LayoutModule,
+    AppRoutingModule,
     AngularFireModule.initializeApp(environment.firebase)
   ],
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}

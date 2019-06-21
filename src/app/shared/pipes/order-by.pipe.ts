@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-import { CartItem } from 'src/app/cart/models/cart-item.model';
+import { CartItem } from '../../cart/models/cart-item.model';
 
 export type OptionSort = 'name' | 'price' | 'sum';
 

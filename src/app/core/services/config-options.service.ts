@@ -4,7 +4,7 @@ import { CoreModule } from '../core.module';
 import { ConfigOption } from '../models/config-option';
 
 @Injectable({
-  providedIn: CoreModule
+  providedIn: 'root'
 })
 export class ConfigOptionsService {
   private config: ConfigOption;

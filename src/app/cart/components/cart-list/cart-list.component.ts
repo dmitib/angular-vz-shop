@@ -5,7 +5,8 @@ import { Subscription, combineLatest } from 'rxjs';
 
 import { CartItem } from '../../models/cart-item.model';
 import { CartService } from '../../services/cart.service';
-import { OptionSort } from 'src/app/shared/pipes/order-by.pipe';
+import { PopupService } from '../../../core/services/popup.services';
+import { OptionSort } from '../../../shared/pipes/order-by.pipe';
 
 @Component({
   selector: 'app-cart-list',
@@ -20,7 +21,10 @@ export class CartListComponent implements OnInit, OnDestroy {
   selectedSorting: OptionSort = 'name';
   isDescending = false;
 
-  constructor(private cartService: CartService) {}
+  constructor(
+    private cartService: CartService,
+    private popupService: PopupService
+  ) {}
 
   ngOnInit() {
     this.sub.add(this.cartService
@@ -37,7 +41,12 @@ export class CartListComponent implements OnInit, OnDestroy {
   }
 
   emptyCart() {
-    this.cartService.emptyCart();
+    this.popupService.confirm('Are you really want to empty cart?').then(result => {
+      if (result) {
+        this.cartService.emptyCart();
+        this.updateView();
+      }
+    });
     this.updateView();
   }
 

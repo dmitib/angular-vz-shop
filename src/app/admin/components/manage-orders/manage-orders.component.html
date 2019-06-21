@@ -1,0 +1,21 @@
+<div class="card">
+  <div class="card-body">
+    <table class="table table-hover table--cart-summary">
+      <tr>
+        <th>Date</th>
+        <th>Name</th>
+        <th>Delivery address</th>
+        <th></th>
+      </tr>
+      <tr *ngFor="let order of orders">
+        <td>{{ order.date }}</td>
+        <td>{{ order.name }}</td>
+        <td>{{ order.deliveryAddress }}</td>
+        <td>
+          <button class="btn btn-secondary mr-2" [routerLink]="['../order/edit', order.id]">Edit</button>
+          <button class="btn btn-danger" (click)="onDelete(order)">Delete</button>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>

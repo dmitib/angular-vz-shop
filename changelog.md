@@ -30,3 +30,15 @@
 * Created OrderByPipe for sorting data in cart
 * Registered OrderByPipe in SharedModule.
 * Applied implementation of sorting products in cart based on price, sum, name
+
+## Task 5
+* Add login component (auth guard)
+* Add admin component and protect this area
+* Add comments module
+* Add manage product
+* Add manage products
+* Add manage order
+* Add manage orders
+* Applied localStorage and sync with cart
+* Add products detail component
+* Add Popup (confirmation) component

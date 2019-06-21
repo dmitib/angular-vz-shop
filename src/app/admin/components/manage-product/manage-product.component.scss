@@ -1,0 +1,32 @@
+.table {
+  &--cart-summary {
+    border: 1px solid #ccc;
+    padding: 5px;
+    margin: 10px 0;
+  }
+
+  & tr {
+    & td {
+      &:first-child {
+        max-width: 100px;
+
+        & i {
+          font-size: 14px;
+        }
+      }
+    }
+  }
+}
+
+.sort {
+  margin-bottom: 20px;
+
+  &__checkbox {
+    padding-top: 6px;
+  }
+}
+
+.sum {
+  width: 200px;
+  padding-top: 10px;
+}

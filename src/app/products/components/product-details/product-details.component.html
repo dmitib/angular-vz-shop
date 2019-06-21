@@ -1,0 +1,22 @@
+<div class="card h-100 card-body mt-3" *ngIf="product">
+  <h5 class="card-title">name: {{product.name | titlecase}}</h5>
+  <p class="card-text">description: {{product.description}}</p>
+  <p class="card-text">category: {{product.category | uppercase}}</p>
+  <p class="card-text">is available: {{product.isAvailable}}</p>
+  <p class="card-text">price: {{product.price | currency:'RUB':'symbol-narrow'}}</p>
+  <button class="btn btn-light" (click)="onGoBack()">Back</button>
+</div>
+<div class="mt-2">
+  <button
+    class="btn btn-outline-info"
+    *ngIf="!commentsService.isDisplayed"
+    (click)="toggleComments(true)"
+  >Show comments</button>
+  <button
+    class="btn btn-outline-secondary"
+    (click)="toggleComments(false)"
+    *ngIf="commentsService.isDisplayed"
+  >Hide comments</button>
+  <router-outlet name="comments"></router-outlet>
+</div>
+

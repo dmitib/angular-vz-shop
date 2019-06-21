@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { ProductsService } from '../../services/products.service';
 import { CartService } from '../../../cart/services/cart.service';
@@ -18,7 +19,8 @@ export class ProductListComponent implements OnInit {
 
   constructor(
     private productsService: ProductsService,
-    private cartService: CartService
+    private cartService: CartService,
+    private router: Router,
   ) { }
 
   ngOnInit() {
@@ -41,5 +43,10 @@ export class ProductListComponent implements OnInit {
 
     this.cartCount = this.cartService.getCartCount();
     this.cartService.setCount(this.cartCount);
+  }
+
+  onSeeDetails(product: ProductModel) {
+    const link = ['/product', product.id];
+    this.router.navigate(link);
   }
 }

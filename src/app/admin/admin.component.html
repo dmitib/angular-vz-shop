@@ -1,0 +1,22 @@
+<h2 class="mt-3">Administrator</h2>
+<nav class="mb-5">
+  <div class="nav nav-tabs nav-fill">
+    <a
+      class="nav-item nav-link"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }"
+      routerLink="./"
+    >Dashboard</a>
+    <a
+      class="nav-item nav-link"
+      routerLinkActive="active"
+      routerLink="./products"
+    >Manage products</a>
+    <a
+      class="nav-item nav-link"
+      routerLinkActive="active"
+      routerLink="./orders"
+    >Manage orders</a>
+  </div>
+</nav>
+<router-outlet></router-outlet>

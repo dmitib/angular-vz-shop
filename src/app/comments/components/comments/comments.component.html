@@ -1,0 +1,28 @@
+<div class="card h-100 card-body mt-3">
+  <h4 class="">Comments:</h4>
+  <div class="form-group">
+    <div class="input-group mb-2">
+      <div class="input-group-prepend">
+        <textarea
+          class="form-control"
+          [(ngModel)]="comments"
+          placeholder="Message"
+          required
+        ></textarea>
+      </div>
+    </div>
+  </div>
+  <div>
+    <button type="button" class="btn btn-primary" (click)="onSend()">Send</button>
+  </div>
+  <ul
+    *ngFor="let message of commentsService.getAll(commentsService.activeProductId)"
+    class="list-group"
+  >
+    <li class="list-group-item mt-3">
+      <div class="d-flex w-100 justify-content-between">
+        <h5 class="mb-1">{{ message }}</h5>
+      </div>
+    </li>
+  </ul>
+</div>

@@ -1,4 +1,4 @@
-<h2>Cart</h2>
+<h2 class="mt-3">Cart</h2>
 <div class="card">
   <div class="card-body">
     <div *ngIf="!items || items.length === 0; else cartSummary">
@@ -14,7 +14,12 @@
           </select>
         </div>
         <div class="custom-control custom-checkbox mr-sm-2 sort__checkbox">
-          <input id="sort-descending" [(ngModel)]="isDescending" type="checkbox" class="custom-control-input">
+          <input
+            id="sort-descending"
+            [(ngModel)]="isDescending"
+            type="checkbox"
+            class="custom-control-input"
+          >
           <label class="custom-control-label" for="sort-descending">Descending order</label>
         </div>
       </div>
@@ -42,6 +47,10 @@
           type="button"
           (click)="emptyCart()"
         >Empty cart</button>
+        <button
+          class="btn btn-primary"
+          routerLink="/order"
+        >Order</button>
         <div class="sum"><b>Total count:</b> {{ cartTotalCount }}</div>
         <div class="sum"><b>Total sum:</b> {{ cartTotalSum | currency:'RUB':'symbol-narrow'}}</div>
       </div>

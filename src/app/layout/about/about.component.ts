@@ -1,8 +1,11 @@
 import { Component, Inject, Optional } from '@angular/core';
-import { ConfigOptionsService } from 'src/app/core/services/config-options.service';
-import { ConstantsService } from 'src/app/core/services/constants.service';
-import { generator10 } from 'src/app/core/services/generator-factory';
-import { LocalStorageService } from 'src/app/core/services/local-storage.service';
+
+import {
+  ConfigOptionsService,
+  ConstantsService,
+  generator10,
+  LocalStorageService
+} from '../../core/services';
 
 @Component({
   selector: 'app-about',

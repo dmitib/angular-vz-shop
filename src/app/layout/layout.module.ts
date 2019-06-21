@@ -1,16 +1,21 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AboutComponent } from './about/about.component';
+import { HeaderComponent } from './header/header.component';
+import { AppRoutingModule } from '../app-routing.module';
 
 @NgModule({
   declarations: [
-    AboutComponent
+    AboutComponent,
+    HeaderComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    AppRoutingModule
   ],
   exports: [
-    AboutComponent
+    AboutComponent,
+    HeaderComponent
   ]
 })
 export class LayoutModule {}

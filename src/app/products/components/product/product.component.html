@@ -6,8 +6,12 @@
   <p class="card-text">price: {{product.price | currency:'RUB':'symbol-narrow'}}</p>
   <p class="card-text">last time action: {{lastTimeAction() | date: 'MMMM d, y, HH:mm:ss'}}</p>
   <button
-    class="btn btn-primary"
+    class="btn btn-primary mb-2"
     [disabled]="!product.isAvailable"
     (click)="onAddToCart()"
   >Add to cart</button>
+  <button
+    class="btn btn-light"
+    (click)="onSeeDetails()"
+  >Details</button>
 </div>

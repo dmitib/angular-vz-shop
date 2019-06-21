@@ -12,6 +12,7 @@ export class ProductComponent implements OnInit {
   @Input() product: ProductModel;
 
   @Output() addToCart: EventEmitter<ProductModel> = new EventEmitter<ProductModel>();
+  @Output() seeDetails = new EventEmitter<ProductModel>();
 
   ngOnInit() {}
 
@@ -21,5 +22,9 @@ export class ProductComponent implements OnInit {
 
   lastTimeAction() {
     return new Date();
+  }
+
+  onSeeDetails() {
+    this.seeDetails.emit(this.product);
   }
 }

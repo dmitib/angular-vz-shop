@@ -1,0 +1,28 @@
+<div class="card">
+  <div class="card-body">
+    <button class="btn btn-primary mb-4" routerLink="/admin/product/add">Add product</button>
+    <table class="table table-hover table--cart-summary">
+      <tr>
+        <th>Name</th>
+        <th>Price</th>
+        <th>Description</th>
+        <th>Category</th>
+        <th>Available</th>
+        <th>Last edited</th>
+        <th></th>
+      </tr>
+      <tr *ngFor="let product of products">
+        <td>{{ product.name }}</td>
+        <td>{{ product.price }}</td>
+        <td>{{ product.description }}</td>
+        <td>{{ product.category }}</td>
+        <td>{{ product.isAvailable }}</td>
+        <td>{{ product.updateDate }}</td>
+        <td>
+          <button class="btn btn-secondary mr-2" [routerLink]="['../product/edit', product.id]">Edit</button>
+          <button class="btn btn-danger" (click)="onDelete(product)">Delete</button>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>
