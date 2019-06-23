@@ -1,52 +1,71 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable, throwError } from 'rxjs';
+import { catchError, concatMap } from 'rxjs/operators';
+import { JsonServerClientService } from 'src/app/core/services/json-server-client.service';
 import { Order } from '../models/order.model';
 
 @Injectable()
 export class OrderService {
-  private orders: Order[] = [];
+  private readonly endpoint = `orders`;
 
-  constructor() { }
+  constructor(private jsonServerClient: JsonServerClientService) {}
 
-  addOrder(order: Order): Order {
-    const id =
-      this.orders.length > 0
-        ? this.orders
-          .map(p => p.id)
-          .reduce((prev, cur) => {
-            return prev < cur ? cur : prev;
-          })
-        : 0;
-    const savedOrder = { ...order, id: id + 1 };
-    this.orders.push(savedOrder);
-    return savedOrder;
+  addOrder(order: Order): Observable<Order> {
+    return this.getOrders().pipe(
+      concatMap(orders => {
+        const maxId = orders
+          .map(o => o.id)
+          .reduce((prev, cur) => Math.max(prev, cur));
+        const orderToAdd: Order = {
+          ...order,
+          id: maxId + 1
+        };
+
+        return this.jsonServerClient
+          .post<Order>(this.endpoint, orderToAdd)
+          .pipe(catchError(this.handleError));
+      })
+    );
   }
 
-  getOrders(): Order[] {
-    return this.orders;
+  editOrder(order: Order): Observable<Order> {
+    const updateUrl = `${this.endpoint}/${order.id}`;
+
+    return this.jsonServerClient
+      .put<Order>(updateUrl, order)
+      .pipe(catchError(this.handleError));
   }
 
-  getOrder(id: number): Order | undefined {
-    return this.orders.find(o => o.id === id);
+  getOrders(): Observable<Order[]> {
+    return this.jsonServerClient.get<Order[]>(this.endpoint).pipe(catchError(this.handleError));
   }
 
-  deleteOrder(id: number): Order | null {
-    const orderIndex = this.orders.findIndex(o => o.id === id);
-    if (orderIndex > -1) {
-      const order = this.orders[orderIndex];
-      this.orders.splice(orderIndex, 1);
-      return order;
+  getOrder(id: number): Observable<Order> {
+    const getUrl = this.endpoint + '/' + id;
+    return this.jsonServerClient.get<Order>(getUrl).pipe(catchError(this.handleError));
+  }
+
+  deleteOrder(id: number): Observable<{}> {
+    const deleteUrl = this.endpoint + '/' + id;
+    return this.jsonServerClient.delete(deleteUrl).pipe(catchError(this.handleError));
+  }
+
+  private handleError(err: HttpErrorResponse) {
+    let errorMessage: string;
+
+    // A client-side or network error occurred.
+    if (err.error instanceof Error) {
+      errorMessage = `An error occurred: ${err.error.message}`;
     } else {
-      return null;
-    }
-  }
-
-  editOrder(order: Order): Order {
-    const index = this.orders.findIndex(o => o.id === order.id);
-    if (index === -1) {
-      throw new Error('No order found');
+      // The backend returned an unsuccessful response code.
+      // The response body may contain clues as to what went wrong,
+      errorMessage = `Backend returned code ${err.status}, body was: ${
+        err.error
+      }`;
     }
 
-    this.orders[index] = {...order};
-    return order;
+    console.error(errorMessage);
+    return throwError(errorMessage);
   }
 }

@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AngularFireModule } from '@angular/fire';
 
 import { environment } from '../environments/environment';
@@ -13,6 +14,7 @@ import { LayoutModule } from './layout/layout.module';
 import { AppRoutingModule } from './app-routing.module';
 import { PathNotFoundComponent } from './shared/components/path-not-found/path-not-found.component';
 import { LoginComponent } from './shared/components/login/login.component';
+import { TimingInterceptor } from './core/interceptors/timing-interceptor';
 
 @NgModule({
   declarations: [
@@ -22,6 +24,7 @@ import { LoginComponent } from './shared/components/login/login.component';
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     CartModule,
     ProductsModule,
     OrdersModule,
@@ -31,7 +34,13 @@ import { LoginComponent } from './shared/components/login/login.component';
     AppRoutingModule,
     AngularFireModule.initializeApp(environment.firebase)
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TimingInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

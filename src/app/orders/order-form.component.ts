@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Subscription } from 'rxjs';
@@ -17,8 +17,10 @@ import { AutoUnsubscribe } from '../core/decorators';
 @AutoUnsubscribe()
 export class OrderFormComponent implements OnInit {
   order: Order;
-  private sub: Subscription = new Subscription();
   cartTotalSum: number;
+
+  private sub: Subscription = new Subscription();
+  private addOrderSub: Subscription;
 
   constructor(
     private cartService: CartService,
@@ -34,7 +36,7 @@ export class OrderFormComponent implements OnInit {
       id: 0,
       cartItems,
       name: '',
-      date: new Date(),
+      date: new Date().toISOString(),
       deliveryAddress: ''
     };
 
@@ -44,9 +46,10 @@ export class OrderFormComponent implements OnInit {
   }
 
   onProcessOrder() {
-    this.orderService.addOrder(this.order);
-    this.cartService.emptyCart();
-    this.router.navigate(['/products-list']);
+    this.addOrderSub = this.orderService.addOrder(this.order).subscribe(() => {
+      this.cartService.emptyCart();
+      this.router.navigate(['/products-list']);
+    });
   }
 
   cancelOrder() {

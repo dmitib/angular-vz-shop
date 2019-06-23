@@ -43,3 +43,11 @@
 * Add products detail component
 * Add Popup (confirmation) component
 * Add auto-unsubscribe decorator
+
+## Task 6
+* Add json server and http client module
+* Convert ProductsService to use http client
+* Get orders by http request
+* Use http client to manage orders. Convert methods in OrderService to use Observable
+* Add timing interceptor for orders requests
+* Use AppSettings service to load service either from local storage, server or set default
