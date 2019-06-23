@@ -1,6 +1,11 @@
-<app-header></app-header>
-<div class="box">
-  <div class="container">
-    <router-outlet></router-outlet>
+<div style="min-height: 100%;" [ngClass]="{
+  'bg-white': settings?.color === 'white',
+  'bg-info': settings?.color === 'blue'
+}">
+  <app-header></app-header>
+  <div class="box">
+    <div class="container">
+      <router-outlet></router-outlet>
+    </div>
   </div>
 </div>

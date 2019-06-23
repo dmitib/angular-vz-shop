@@ -1,9 +1,9 @@
-import { CartItem } from '../../cart/models/cart-item.model';
+import { CartItem } from 'src/app/cart/models/cart-item.model';
 
 export interface Order {
   id: number;
   cartItems: CartItem[];
-  date: Date;
+  date: string;
   name: string;
   deliveryAddress: string;
 }

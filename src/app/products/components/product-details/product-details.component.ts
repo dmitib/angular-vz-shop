@@ -44,9 +44,17 @@ export class ProductDetailsComponent implements OnInit {
     this.commentsService.activeProductId = this.product.id;
     this.commentsService.isDisplayed = display;
     if (display) {
-      this.router.navigate(['/product', this.product.id, { outlets: { comments: ['comments'] } }]);
+      this.router.navigate([
+        '/product',
+        this.product.id,
+        { outlets: { comment: ['comments'] } }
+      ]);
     } else {
-      this.router.navigate(['/product', this.commentsService.activeProductId, { outlets: { comments: null } }]);
+      this.router.navigate([
+        '/product',
+        this.product.id,
+        { outlets: { comment: null } }
+      ]);
     }
   }
 }

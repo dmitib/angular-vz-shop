@@ -10,6 +10,8 @@ import { CartService } from '../../cart';
 })
 export class HeaderComponent implements OnInit {
   cartTotalCount: number;
+  expanded: boolean;
+
   private sub: Subscription = new Subscription();
 
   constructor(private cartService: CartService) {}
@@ -23,5 +25,9 @@ export class HeaderComponent implements OnInit {
     this.sub.add(this.cartService
       .getCount()
       .subscribe(count => (this.cartTotalCount = count)));
+  }
+
+  onToggleMenu() {
+    this.expanded = !this.expanded;
   }
 }
