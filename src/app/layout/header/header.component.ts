@@ -20,6 +20,7 @@ export class HeaderComponent implements OnInit {
     const title: HTMLHeadingElement = this.title.nativeElement;
     title.innerText = 'VZ-Shop App';
 
+    // нет отписки
     this.sub.add(this.cartService
       .getCount()
       .subscribe(count => (this.cartTotalCount = count)));

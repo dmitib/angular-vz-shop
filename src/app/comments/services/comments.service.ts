@@ -14,6 +14,7 @@ export class CommentsService {
     this.comments.set(this.activeProductId, comments);
   }
 
+  // как-то не очент подходит название метода, если передается productId
    getAll(productId: number): string[] {
     return this.comments.get(productId);
   }

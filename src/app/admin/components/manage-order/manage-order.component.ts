@@ -37,6 +37,7 @@ export class ManageOrderComponent implements OnInit, OnDestroy, CanComponentDeac
       });
   }
 
+  // подписка не создается
   ngOnDestroy() {
     if (this.sub) {
       this.sub.unsubscribe();
