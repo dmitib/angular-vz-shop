@@ -5,5 +5,15 @@ export interface Order {
   cartItems: CartItem[];
   date: string;
   name: string;
-  deliveryAddress: string;
+  phones: string[];
+  deliveryDate?: string;
+  deliveryType: DeliveryType;
+  deliveryAddress?: string;
+  email?: string;
+  remark?: string;
+}
+
+export enum DeliveryType {
+  self,
+  byAddress
 }

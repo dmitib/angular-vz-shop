@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
-import { JsonServerClientService } from 'src/app/core/services/json-server-client.service';
+
+import { JsonServerClientService } from '../../core/services/json-server-client.service';
 import { ProductModel } from '../models/product.model';
+import { getIsoDate } from '../../core/helpers/date.helper';
 
 @Injectable({
   providedIn: 'root'
@@ -69,6 +71,6 @@ export class ProductsService {
   }
 
   private getUpdateDate(): string {
-    return new Date().toISOString();
+    return getIsoDate(new Date());
   }
 }

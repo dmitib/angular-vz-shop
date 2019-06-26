@@ -68,3 +68,24 @@
 * Get product from database via effect.
 * Get products from database via effect.
 * Modify state through products reducer.
+
+## Task 8
+* Add styles to order form.
+* Add and remove phones.
+* Convert phones to array form control.
+* Show delivery address field only if delivery type is byAddress.
+* Generate control error messages in class.
+* Adjust validation on delivery type change.
+* Point app settings type in validate address service.
+* Add async validation directive.
+* Add async validation to the delivery address field.
+* Add custom validators directive with parameters.
+* Set name validation on blur event.
+* Use string as a delivery date property for order model.
+* Convert date to ISO date string using helper.
+* Add custom validation for delivery date.
+* Add conditional validation for delivery address.
+* Use script validation for order form.
+* Use form builder to create order form.
+* Add validation blocks to input elements in OrderForm component.
+* Use reactive form to create order. Update template to use reactive form.

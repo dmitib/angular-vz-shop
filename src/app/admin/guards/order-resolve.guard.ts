@@ -6,10 +6,11 @@ import { catchError, map, take } from 'rxjs/operators';
 
 import { Store } from '@ngrx/store';
 
-import { Order } from '../../orders/models/order.model';
+import { Order, DeliveryType } from '../../orders/models/order.model';
 import { OrderService } from '../../orders/services/order.service';
 import { AppState } from '../../core/state/app.state';
 import { Go } from '../../core/state/router/router.actions';
+import { getIsoDate } from '../../core/helpers/date.helper';
 
 @Injectable()
 export class OrderResolveGuard implements Resolve<Order> {
@@ -22,10 +23,12 @@ export class OrderResolveGuard implements Resolve<Order> {
     if (!route.paramMap.has('orderID')) {
       return of({
         cartItems: [],
-        date: new Date().toISOString(),
+        date: getIsoDate(new Date()),
         deliveryAddress: '',
         id: 0,
-        name: ''
+        name: '',
+        phones: [],
+        deliveryType: DeliveryType.byAddress
       });
     }
 

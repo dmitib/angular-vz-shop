@@ -1,36 +1,41 @@
-<div *ngIf="order.cartItems.length === 0; else orderForm">
-  <div class="mt-3 mb-3">There is nothing to checkout</div>
-  <button class="btn btn-primary" type="button" routerLink="/products-list">
+<div *ngIf="cartItems.length === 0; else orderFormTemplate">
+  There is nothing to checkout
+  <button class="btn" type="button" routerLink="/products-list">
     Back to products
   </button>
 </div>
-<ng-template #orderForm>
-  <div *ngIf="order.cartItems.length > 0" class="panel panel-default">
+<ng-template #orderFormTemplate>
+  <div class="panel panel-default">
     <div class="panel-heading">
       <h2 class="mt-3">Order Form</h2>
     </div>
     <div class="panel-body card">
-      <form class="card-body" (ngSubmit)="onProcessOrder()" #form="ngForm">
+      <form class="card-body" (ngSubmit)="onProcessOrder()" [formGroup]="orderForm">
         <div class="form-group">
-          <h3>Cart items</h3>
+          <label>Cart items</label>
           <table class="table table-striped table--cart-summary">
-            <tr>
-              <th>Name / Description</th>
-              <th>Price</th>
-              <th>Count</th>
-              <th>Sum</th>
-            </tr>
-            <tr *ngFor="let item of order.cartItems">
-              <td>{{ item.name }} <br> <i>{{ item.description }}</i></td>
-              <td>{{ item.price | currency:'RUB':'symbol-narrow'}}</td>
-              <td>
-                <span>{{ item.count }}</span>
-              </td>
-              <td>{{ item.count * item.price | currency:'RUB':'symbol-narrow' }}</td>
-            </tr>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Count</th>
+                <th>Price</th>
+                <th>Sum</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of cartItems">
+                <td>{{ item.name }}</td>
+                <td>{{ item.count }}</td>
+                <td>{{ item.price | currency:'RUB':'symbol-narrow'}}</td>
+                <td>{{ item.count * item.price | currency:'RUB':'symbol-narrow' }}</td>
+              </tr>
+            </tbody>
           </table>
         </div>
-        <div class="form-group">
+        <div
+          class="form-group required"
+          [class.has-error]="controlIsInvalid(orderForm.get('name'))"
+        >
           <label for="name">Name</label>
           <input
             type="text"
@@ -38,11 +43,130 @@
             id="name"
             name="name"
             placeholder="Name"
-            required
-            [(ngModel)]="order.name"
+            formControlName="name"
           />
+          <ng-container
+            *ngTemplateOutlet="
+              errorsTemplate;
+              context: { $implicit: orderForm.get('name'), section: 'name' }
+            "
+          ></ng-container>
+        </div>
+        <div formArrayName="phones" class="required">
+          <label>Phones</label>
+          <div
+            *ngFor="let phone of phones.controls; index as i"
+            class="form-group"
+            [class.has-error]="controlIsInvalid(phone)"
+          >
+            <div class="row">
+              <div class="col-md-11">
+                <input
+                  type="tel"
+                  class="form-control"
+                  name="phone"
+                  placeholder="Phone"
+                  [formControlName]="i"
+                />
+              </div>
+              <div class="col-md-1">
+                <button
+                  type="button"
+                  class="btn btn-default btn-sm"
+                  [disabled]="phones.controls.length === 1"
+                  (click)="onRemovePhone(i)"
+                >
+                  <span class="glyphicon glyphicon-remove"></span>
+                </button>
+              </div>
+            </div>
+            <ng-container
+              *ngTemplateOutlet="
+                errorsTemplate;
+                context: { $implicit: phone, section: 'phone' }
+              "
+            ></ng-container>
+          </div>
+          <div class="form-group">
+            <button
+              class="btn btn-default btn-sm"
+              type="button"
+              (click)="onAddPhone()"
+            >
+              Add phone
+            </button>
+          </div>
+        </div>
+        <div
+          class="form-group"
+          [class.has-error]="controlIsInvalid(orderForm.get('email'))"
+        >
+          <label for="email">Email</label>
+          <input
+            type="email"
+            class="form-control"
+            id="email"
+            name="email"
+            placeholder="Email"
+            formControlName="email"
+          />
+          <ng-container
+            *ngTemplateOutlet="
+              errorsTemplate;
+              context: { $implicit: orderForm.get('email'), section: 'email' }
+            "
+          ></ng-container>
+        </div>
+        <div
+          class="form-group"
+          [class.has-error]="controlIsInvalid(orderForm.get('deliveryDate'))"
+        >
+          <label for="delivery-date">Delivery date</label>
+          <input
+            type="date"
+            class="form-control"
+            id="delivery-date"
+            name="deliveryDate"
+            formControlName="deliveryDate"
+          />
+          <ng-container
+            *ngTemplateOutlet="
+              errorsTemplate;
+              context: {
+                $implicit: orderForm.get('deliveryDate'),
+                section: 'deliveryDate'
+              }
+            "
+          ></ng-container>
         </div>
         <div class="form-group">
+          <label>Delivery type</label>
+          <div class="radio">
+            <label
+              ><input
+                type="radio"
+                name="deliveryType"
+                formControlName="deliveryType"
+                [value]="DeliveryType.byAddress"
+              />By address</label
+            >
+          </div>
+          <div class="radio">
+            <label
+              ><input
+                type="radio"
+                name="deliveryType"
+                formControlName="deliveryType"
+                [value]="DeliveryType.self"
+              />Self</label
+            >
+          </div>
+        </div>
+        <div
+          *ngIf="orderForm.get('deliveryType').value === DeliveryType.byAddress"
+          class="form-group required"
+          [class.has-error]="controlIsInvalid(orderForm.get('deliveryAddress'))"
+        >
           <label for="delivery-address">Delivery address</label>
           <input
             type="text"
@@ -50,30 +174,71 @@
             id="delivery-address"
             name="deliveryAddress"
             placeholder="Delivery address"
-            required
-            [(ngModel)]="order.deliveryAddress"
+            formControlName="deliveryAddress"
           />
+          <ng-container
+            *ngTemplateOutlet="
+              errorsTemplate;
+              context: {
+                $implicit: orderForm.get('deliveryAddress'),
+                section: 'deliveryAddress'
+              }
+            "
+          ></ng-container>
         </div>
-        <div class="d-flex justify-content-between">
-          <div>
-            <button type="submit" class="btn btn-success mr-1" [disabled]="form.invalid">
-              Create order
-            </button>
-            <button
-              class="btn btn-link mr-1"
-              type="button"
-              (click)="cancelOrder()"
-            >Cancel order</button>
-            <button
-              class="btn btn-primary"
-              type="button"
-              routerLink="/cart"
-            >Back to cart
-            </button>
-          </div>
-          <div><b>Total sum: </b>{{ cartTotalSum | currency:'RUB':'symbol-narrow'}}</div>
+        <div
+          class="form-group"
+          [class.has-error]="controlIsInvalid(orderForm.get('remark'))"
+        >
+          <label for="remark">Remark</label>
+          <textarea
+            class="form-control app-order-form__remark"
+            rows="3"
+            id="remark"
+            name="remark"
+            placeholder="Remark"
+            formControlName="remark"
+          >
+          </textarea>
+          <ng-container
+            *ngTemplateOutlet="
+              errorsTemplate;
+              context: { $implicit: orderForm.get('remark'), section: 'remark' }
+            "
+          ></ng-container>
+        </div>
+        <div>Total: {{ totalSum }}</div>
+        <div class="app-order-form-operations">
+          <button
+            type="submit"
+            class="btn btn-primary app-order-form-operations__button"
+            [disabled]="orderForm.invalid"
+          >
+            Create order
+          </button>
+          <button
+            type="button"
+            class="btn btn-warning app-order-form-operations__button"
+            (click)="cancelOrder()"
+          >
+            Cancel order
+          </button>
+          <button
+            class="btn app-order-form-operations__button"
+            type="button"
+            routerLink="/cart"
+          >
+            Back to cart
+          </button>
         </div>
       </form>
     </div>
   </div>
+</ng-template>
+<ng-template #errorsTemplate let-control let-section="section">
+  <span class="help-block" *ngIf="controlHasErrors(control)">
+    <span *ngFor="let message of getControlErrorMessages(control, section)">{{
+      message
+    }}</span>
+  </span>
 </ng-template>
