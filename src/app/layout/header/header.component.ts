@@ -1,8 +1,11 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+
 import { Subscription } from 'rxjs';
 
 import { CartService } from '../../cart';
+import { AutoUnsubscribe } from '../../core/decorators';
 
+@AutoUnsubscribe()
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -20,7 +23,6 @@ export class HeaderComponent implements OnInit {
     const title: HTMLHeadingElement = this.title.nativeElement;
     title.innerText = 'VZ-Shop App';
 
-    // нет отписки
     this.sub.add(this.cartService
       .getCount()
       .subscribe(count => (this.cartTotalCount = count)));

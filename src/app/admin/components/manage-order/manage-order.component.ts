@@ -1,5 +1,5 @@
 import { Location } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { Subscription } from 'rxjs';
@@ -15,7 +15,7 @@ import { OrderService } from '../../../orders/services/order.service';
   templateUrl: './manage-order.component.html',
   styleUrls: ['./manage-order.component.scss']
 })
-export class ManageOrderComponent implements OnInit, OnDestroy, CanComponentDeactivate {
+export class ManageOrderComponent implements OnInit, CanComponentDeactivate {
   order: Order;
   originalOrder: Order;
   private sub: Subscription;
@@ -35,13 +35,6 @@ export class ManageOrderComponent implements OnInit, OnDestroy, CanComponentDeac
         this.order = { ...order };
         this.originalOrder = { ...order };
       });
-  }
-
-  // подписка не создается
-  ngOnDestroy() {
-    if (this.sub) {
-      this.sub.unsubscribe();
-    }
   }
 
   canDeactivate(): Promise<boolean> | boolean {

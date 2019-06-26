@@ -42,3 +42,4 @@
 * Applied localStorage and sync with cart
 * Add products detail component
 * Add Popup (confirmation) component
+* Add auto-unsubscribe decorator

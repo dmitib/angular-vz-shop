@@ -7,12 +7,14 @@ import { Order } from '../orders/models/order.model';
 import { CartService } from '../cart/services/cart.service';
 import { PopupService } from '../core/services/popup.services';
 import { OrderService } from '../orders/services/order.service';
+import { AutoUnsubscribe } from '../core/decorators';
 
 @Component({
   selector: 'app-order-form',
   templateUrl: './order-form.component.html',
   styleUrls: ['./order-form.component.scss'],
 })
+@AutoUnsubscribe()
 export class OrderFormComponent implements OnInit {
   order: Order;
   private sub: Subscription = new Subscription();
@@ -36,7 +38,6 @@ export class OrderFormComponent implements OnInit {
       deliveryAddress: ''
     };
 
-    // нет отписки, можно добавить автоансабскрайб декоратор
     this.sub.add(this.cartService
       .getSum()
       .subscribe(sum => (this.cartTotalSum = sum)));

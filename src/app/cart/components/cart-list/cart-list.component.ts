@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 // RxJs
 import { Subscription, combineLatest } from 'rxjs';
@@ -7,13 +7,15 @@ import { CartItem } from '../../models/cart-item.model';
 import { CartService } from '../../services/cart.service';
 import { PopupService } from '../../../core/services/popup.services';
 import { OptionSort } from '../../../shared/pipes/order-by.pipe';
+import { AutoUnsubscribe } from '../../../core/decorators';
 
 @Component({
   selector: 'app-cart-list',
   templateUrl: './cart-list.component.html',
   styleUrls: ['./cart-list.component.scss']
 })
-export class CartListComponent implements OnInit, OnDestroy {
+@AutoUnsubscribe()
+export class CartListComponent implements OnInit {
   items: CartItem[];
   cartTotalSum: number;
   cartTotalCount: number;
@@ -34,10 +36,6 @@ export class CartListComponent implements OnInit, OnDestroy {
       .getCount()
       .subscribe(count => (this.cartTotalCount = count)));
     this.updateView();
-  }
-
-  ngOnDestroy() {
-    this.sub.unsubscribe();
   }
 
   emptyCart() {

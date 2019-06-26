@@ -16,7 +16,7 @@
     <button type="button" class="btn btn-primary" (click)="onSend()">Send</button>
   </div>
   <ul
-    *ngFor="let message of commentsService.getAll(commentsService.activeProductId)"
+    *ngFor="let message of commentsService.getComments(commentsService.activeProductId)"
     class="list-group"
   >
     <li class="list-group-item mt-3">

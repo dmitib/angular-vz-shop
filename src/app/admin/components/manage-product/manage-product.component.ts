@@ -1,6 +1,6 @@
 import { Location } from '@angular/common';
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 import { Subscription } from 'rxjs';
 import { pluck } from 'rxjs/operators';
@@ -15,7 +15,7 @@ import { CanComponentDeactivate } from '../../../core/interfaces/can-component-d
   templateUrl: './manage-product.component.html',
   styleUrls: ['./manage-product.component.scss']
 })
-export class ManageProductComponent implements OnInit, OnDestroy, CanComponentDeactivate {
+export class ManageProductComponent implements OnInit, CanComponentDeactivate {
   product: ProductModel;
   originalProduct: ProductModel;
   private sub: Subscription;
@@ -23,7 +23,6 @@ export class ManageProductComponent implements OnInit, OnDestroy, CanComponentDe
   constructor(
     private route: ActivatedRoute,
     private location: Location,
-    private router: Router,
     private popupService: PopupService,
     private productsService: ProductsService
   ) {}
@@ -37,14 +36,7 @@ export class ManageProductComponent implements OnInit, OnDestroy, CanComponentDe
       });
   }
 
-  // Подписка нигде не создается
-  ngOnDestroy() {
-    if (this.sub) {
-      this.sub.unsubscribe();
-    }
-  }
-
-   canDeactivate(): Promise<boolean> | boolean {
+  canDeactivate(): Promise<boolean> | boolean {
     const flags = Object.keys(this.originalProduct).map(key => {
       if (this.originalProduct[key] === this.product[key]) {
         return true;
@@ -61,7 +53,7 @@ export class ManageProductComponent implements OnInit, OnDestroy, CanComponentDe
     return this.popupService.confirm('Discard changes?');
   }
 
-   async onSaveProduct() {
+  async onSaveProduct() {
     const product = { ...this.product };
     let savedProduct: ProductModel;
     if (product.id) {
@@ -75,7 +67,7 @@ export class ManageProductComponent implements OnInit, OnDestroy, CanComponentDe
     this.onGoBack();
   }
 
-   onGoBack() {
+  onGoBack() {
     this.location.back();
   }
 }

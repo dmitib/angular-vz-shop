@@ -15,7 +15,7 @@ export class CommentsComponent {
 
   onSend() {
     if (this.comments) {
-      this.commentsService.add(this.commentsService.activeProductId, this.comments);
+      this.commentsService.addComment(this.commentsService.activeProductId, this.comments);
       this.comments = '';
     }
   }
