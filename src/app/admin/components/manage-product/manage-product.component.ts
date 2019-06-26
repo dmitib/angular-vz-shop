@@ -37,6 +37,7 @@ export class ManageProductComponent implements OnInit, OnDestroy, CanComponentDe
       });
   }
 
+  // Подписка нигде не создается
   ngOnDestroy() {
     if (this.sub) {
       this.sub.unsubscribe();

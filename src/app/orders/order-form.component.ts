@@ -36,6 +36,7 @@ export class OrderFormComponent implements OnInit {
       deliveryAddress: ''
     };
 
+    // нет отписки, можно добавить автоансабскрайб декоратор
     this.sub.add(this.cartService
       .getSum()
       .subscribe(sum => (this.cartTotalSum = sum)));
