@@ -1,10 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
+import { Store } from '@ngrx/store';
+
 import { AuthService } from '../../../core/services';
+import { AppState } from '../../../core/state/app.state';
+import { Go } from '../../../core/state/router/router.actions';
 
 @Component({
   templateUrl: './login.component.html',
@@ -15,7 +18,10 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   private unsubscribe: Subject<void> = new Subject();
 
-  constructor(public authService: AuthService, private router: Router) {}
+  constructor(
+    public authService: AuthService,
+    private store: Store<AppState>
+  ) {}
 
   ngOnInit() {
     this.setMessage();
@@ -46,7 +52,7 @@ export class LoginComponent implements OnInit, OnDestroy {
               : '/admin';
 
              // Redirect the user
-            this.router.navigate([redirect]);
+            this.store.dispatch(new Go({ path: [redirect] }));
           }
         },
         err => console.error(err)

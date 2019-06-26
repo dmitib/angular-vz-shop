@@ -1,20 +1,29 @@
-import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { Subscription } from 'rxjs';
-import { pluck } from 'rxjs/operators';
+import { filter, pluck } from 'rxjs/operators';
+
+import { select, Store } from '@ngrx/store';
 
 import { ProductModel } from '../../../products/models/product.model';
 import { PopupService } from '../../../core/services/popup.services';
-import { ProductsService } from '../../../products/services/';
 import { CanComponentDeactivate } from '../../../core/interfaces/can-component-deactivate.interface';
+import { AppState } from '../../../core/state/app.state';
+import * as pa from '../../../core/state/products/products.actions';
+import {
+  getProductEditComplete,
+  getSelectedProduct
+} from '../../../core/state/products/products.selectors';
+import * as ra from '../../../core/state/router/router.actions';
+import { AutoUnsubscribe } from 'src/app/core/decorators';
 
 @Component({
   selector: 'app-manage-product',
   templateUrl: './manage-product.component.html',
   styleUrls: ['./manage-product.component.scss']
 })
+@AutoUnsubscribe()
 export class ManageProductComponent implements OnInit, CanComponentDeactivate {
   product: ProductModel;
   originalProduct: ProductModel;
@@ -22,18 +31,38 @@ export class ManageProductComponent implements OnInit, CanComponentDeactivate {
 
   constructor(
     private route: ActivatedRoute,
-    private location: Location,
     private popupService: PopupService,
-    private productsService: ProductsService
+    private store: Store<AppState>
   ) {}
 
   ngOnInit() {
-    this.route.data
+    this.sub = this.route.data
       .pipe(pluck('product'))
       .subscribe((product: ProductModel) => {
         this.product = { ...product };
         this.originalProduct = { ...product };
       });
+
+    this.sub.add(
+      this.store
+        .pipe(
+          select(getSelectedProduct),
+          filter(product => !!product)
+        )
+        .subscribe(product => {
+          this.product = { ...product };
+          this.originalProduct = { ...product };
+        })
+    );
+
+    this.sub.add(
+      this.store
+        .pipe(
+          select(getProductEditComplete),
+          filter(editComplete => editComplete)
+        )
+        .subscribe(() => this.onGoBack())
+    );
   }
 
   canDeactivate(): Promise<boolean> | boolean {
@@ -55,19 +84,14 @@ export class ManageProductComponent implements OnInit, CanComponentDeactivate {
 
   async onSaveProduct() {
     const product = { ...this.product };
-    let savedProduct: ProductModel;
     if (product.id) {
-      savedProduct = await this.productsService.editProduct(product);
+      this.store.dispatch(new pa.EditProduct(product));
     } else {
-      savedProduct = await this.productsService.addProduct(product);
+      this.store.dispatch(new pa.AddProduct(product));
     }
-
-    this.originalProduct = { ...savedProduct };
-    this.product = { ...savedProduct };
-    this.onGoBack();
   }
 
   onGoBack() {
-    this.location.back();
+    this.store.dispatch(new ra.Back());
   }
 }

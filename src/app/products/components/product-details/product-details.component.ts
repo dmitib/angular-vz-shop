@@ -1,60 +1,59 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { Router, ActivatedRoute, Params } from '@angular/router';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 
-import { switchMap } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
+
+import { select, Store } from '@ngrx/store';
 
 import { ProductModel } from '../../models/product.model';
-import { ProductsService } from '../../services/products.service';
 import { CommentsService } from '../../../comments/services/comments.service';
+import { AppState } from '../../../core/state/app.state';
+import { Go } from '../../../core/state/router/router.actions';
+import { GetProductFromUrl } from '../../../core/state/products/products.actions';
+import { getSelectedProduct } from '../../../core/state/products/products.selectors';
 
 @Component({
   templateUrl: './product-details.component.html',
   styleUrls: ['./product-details.component.scss']
 })
-export class ProductDetailsComponent implements OnInit {
+export class ProductDetailsComponent implements OnInit, OnDestroy {
   product: ProductModel;
+
+  private sub: Subscription;
+
   constructor(
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private productsService: ProductsService,
-    public commentsService: CommentsService
+    public commentsService: CommentsService,
+    private store: Store<AppState>
   ) {}
 
    ngOnInit() {
-    this.product = new ProductModel();
+    this.store.dispatch(new GetProductFromUrl());
+    this.sub = this.store
+      .pipe(select(getSelectedProduct))
+      .subscribe(product => (this.product = product));
+  }
 
-    this.activatedRoute.paramMap
-      .pipe(
-        switchMap((params: Params) =>
-          this.productsService.getProduct(+params.get('productID'))
-        )
-      )
-      .subscribe(
-        product => (this.product = { ...product }),
-        err => console.error(err)
-      );
+  ngOnDestroy() {
+    if (this.sub) {
+      this.sub.unsubscribe();
+    }
   }
 
   onGoBack() {
     this.commentsService.isDisplayed = false;
-    this.router.navigate(['/products-list']);
+    this.store.dispatch(new Go({ path: ['/products-list'] }));
   }
 
   toggleComments(display: boolean) {
     this.commentsService.activeProductId = this.product.id;
     this.commentsService.isDisplayed = display;
-    if (display) {
-      this.router.navigate([
-        '/product',
-        this.product.id,
-        { outlets: { comment: ['comments'] } }
-      ]);
-    } else {
-      this.router.navigate([
-        '/product',
-        this.product.id,
-        { outlets: { comment: null } }
-      ]);
-    }
+    this.store.dispatch(
+      new Go({
+        path: [
+          '/product',
+          this.product.id,
+          { outlets: { feedback: display ? ['feedback'] : null } }
+        ]
+      })
+    );
   }
 }

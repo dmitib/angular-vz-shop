@@ -1,9 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 
-import { ProductsService } from '../../services/products.service';
+import { Observable } from 'rxjs';
+
+import { Store, select } from '@ngrx/store';
+
 import { CartService } from '../../../cart/services/cart.service';
 import { ProductModel } from '../../models/product.model';
+import { AppState } from '../../../core/state/app.state';
+import * as act from '../../../core/state/products/products.actions';
+import { getProducts, getProductsLoading } from '../../../core/state/products/products.selectors';
+import { Go } from '../../../core/state/router/router.actions';
 
 @Component({
   selector: 'app-product-list',
@@ -11,23 +17,22 @@ import { ProductModel } from '../../models/product.model';
   styleUrls: ['./product-list.component.scss']
 })
 export class ProductListComponent implements OnInit {
-  products: Promise<ProductModel[]>;
   cartSum: number;
   cartCount: number;
   isLoading = true;
   isEmpty = false;
+  products$: Observable<ProductModel[]>;
+  loading$: Observable<boolean>;
 
   constructor(
-    private productsService: ProductsService,
     private cartService: CartService,
-    private router: Router,
+    private store: Store<AppState>
   ) { }
 
   ngOnInit() {
-    this.products = this.productsService.getProducts();
-    this.products
-      .then(products => products.length ? products : this.isEmpty = true)
-      .finally(() => this.isLoading = false);
+    this.products$ = this.store.pipe(select(getProducts));
+    this.loading$ = this.store.pipe(select(getProductsLoading));
+    this.store.dispatch(new act.GetProducts());
   }
 
   onAddToCart(product: ProductModel) {
@@ -47,6 +52,6 @@ export class ProductListComponent implements OnInit {
 
   onSeeDetails(product: ProductModel) {
     const link = ['/product', product.id];
-    this.router.navigate(link);
+    this.store.dispatch(new Go({ path: link }));
   }
 }

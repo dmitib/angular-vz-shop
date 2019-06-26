@@ -11,6 +11,7 @@
     class="btn btn-outline-info"
     *ngIf="!commentsService.isDisplayed"
     (click)="toggleComments(true)"
+    [disabled]="!product.id"
   >Show comments</button>
   <button
     class="btn btn-outline-secondary"

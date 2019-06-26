@@ -1,11 +1,16 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
+
 import { SharedModule } from '../shared';
 import { ProductListComponent, ProductComponent } from './components';
 import { ProductsRoutingModule } from './products-routing.module';
 import { ProductDetailsComponent } from './components/product-details/product-details.component';
 import { CommentsModule } from '../comments/comments.module';
+import { productsReducer } from '../core/state/products/products.reducer';
+import { ProductsEffects } from '../core/state/products/products.effects';
 
 @NgModule({
   declarations: [
@@ -17,7 +22,9 @@ import { CommentsModule } from '../comments/comments.module';
     CommonModule,
     SharedModule,
     ProductsRoutingModule,
-    CommentsModule
+    CommentsModule,
+    StoreModule.forFeature('products', productsReducer),
+    EffectsModule.forFeature([ProductsEffects])
   ],
   exports: [ProductListComponent]
 })

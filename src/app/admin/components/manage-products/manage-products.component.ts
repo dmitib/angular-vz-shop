@@ -1,28 +1,49 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+
+import { Observable, Subscription } from 'rxjs';
+import { filter } from 'rxjs/operators';
+
+import { select, Store } from '@ngrx/store';
 
 import { ProductModel } from '../../../products/models/product.model';
-import { ProductsService } from '../../../products/services';
+import { AppState } from '../../../core/state/app.state';
+import * as act from '../../../core/state/products/products.actions';
+import {
+  getProductEditComplete,
+  getProducts
+} from '../../../core/state/products/products.selectors';
 
 @Component({
   selector: 'app-manage-products',
   templateUrl: './manage-products.component.html',
   styleUrls: ['./manage-products.component.scss']
 })
-export class ManageProductsComponent implements OnInit {
-  products: ProductModel[];
+export class ManageProductsComponent implements OnInit, OnDestroy {
+  products$: Observable<ProductModel[]>;
 
-  constructor(private productsService: ProductsService) { }
+  private sub: Subscription;
+
+  constructor(private store: Store<AppState>) {}
 
   ngOnInit() {
-    this.initProducts();
+    this.products$ = this.store.pipe(select(getProducts));
+    this.sub = this.store
+      .pipe(
+        select(getProductEditComplete),
+        filter(editComplete => editComplete)
+      )
+      .subscribe(() => this.store.dispatch(new act.GetProducts()));
+
+    this.store.dispatch(new act.GetProducts());
   }
 
-  async onDelete(product: ProductModel) {
-    await this.productsService.deleteProduct(product.id);
-    this.initProducts();
+  ngOnDestroy() {
+    if (this.sub) {
+      this.sub.unsubscribe();
+    }
   }
 
-  private async initProducts() {
-    this.products = await this.productsService.getProducts();
+  onDelete(product: ProductModel) {
+    this.store.dispatch(new act.DeleteProduct(product.id));
   }
 }

@@ -9,6 +9,7 @@ import { LocalStorageService } from './services/local-storage.service';
 import { AppSettings$, appSettingsFactory } from './services/app-settings-factory';
 import { JsonServerClientService } from './services/json-server-client.service';
 import { JsonServerApiProvider } from './services/json-server.config';
+import { CoreStoreModule } from './state/core-store.module';
 
 @NgModule({
   declarations: [],
@@ -34,7 +35,8 @@ import { JsonServerApiProvider } from './services/json-server.config';
     }
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    CoreStoreModule
   ]
 })
 export class CoreModule { }

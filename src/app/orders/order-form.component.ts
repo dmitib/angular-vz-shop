@@ -1,13 +1,16 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
 
 import { Subscription } from 'rxjs';
+
+import { Store } from '@ngrx/store';
 
 import { Order } from '../orders/models/order.model';
 import { CartService } from '../cart/services/cart.service';
 import { PopupService } from '../core/services/popup.services';
 import { OrderService } from '../orders/services/order.service';
 import { AutoUnsubscribe } from '../core/decorators';
+import { AppState } from '../core/state/app.state';
+import { Go } from '../core/state/router/router.actions';
 
 @Component({
   selector: 'app-order-form',
@@ -24,7 +27,7 @@ export class OrderFormComponent implements OnInit {
   constructor(
     private cartService: CartService,
     private popupService: PopupService,
-    private router: Router,
+    private store: Store<AppState>,
     private orderService: OrderService
   ) { }
 
@@ -47,7 +50,7 @@ export class OrderFormComponent implements OnInit {
   onProcessOrder() {
     this.orderService.addOrder(this.order).subscribe(() => {
       this.cartService.emptyCart();
-      this.router.navigate(['/products-list']);
+      this.store.dispatch(new Go({ path: ['/products-list'] }));
     });
   }
 
@@ -56,7 +59,7 @@ export class OrderFormComponent implements OnInit {
       result => {
         if (result) {
           this.cartService.emptyCart();
-          this.router.navigate(['/products-list']);
+          this.store.dispatch(new Go({ path: ['/products-list'] }));
         }
       }
     );
