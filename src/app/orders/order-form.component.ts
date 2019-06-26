@@ -20,7 +20,6 @@ export class OrderFormComponent implements OnInit {
   cartTotalSum: number;
 
   private sub: Subscription = new Subscription();
-  private addOrderSub: Subscription;
 
   constructor(
     private cartService: CartService,
@@ -40,15 +39,13 @@ export class OrderFormComponent implements OnInit {
       deliveryAddress: ''
     };
 
-    // Если так, то не совсем понятно, зачем использовать addOrderSub
-    // Нет отписки
     this.sub.add(this.cartService
       .getSum()
       .subscribe(sum => (this.cartTotalSum = sum)));
   }
 
   onProcessOrder() {
-    this.addOrderSub = this.orderService.addOrder(this.order).subscribe(() => {
+    this.orderService.addOrder(this.order).subscribe(() => {
       this.cartService.emptyCart();
       this.router.navigate(['/products-list']);
     });

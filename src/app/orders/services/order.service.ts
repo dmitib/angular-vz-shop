@@ -14,9 +14,10 @@ export class OrderService {
   addOrder(order: Order): Observable<Order> {
     return this.getOrders().pipe(
       concatMap(orders => {
-        const maxId = orders
+        const maxId = orders.length ? orders
           .map(o => o.id)
-          .reduce((prev, cur) => Math.max(prev, cur));
+          .reduce((prev, cur) => Math.max(prev, cur)) : 0;
+
         const orderToAdd: Order = {
           ...order,
           id: maxId + 1

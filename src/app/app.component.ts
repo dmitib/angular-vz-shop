@@ -23,6 +23,16 @@ export class AppComponent implements OnInit, OnDestroy {
     this.settingsSub = this.appSettings$.subscribe(s => (this.settings = s));
   }
 
+  bgColor(): string {
+    const color: string = this.settings.color;
+
+    if (color === 'white') {
+      return 'bg-white';
+    } else if (color === 'blue') {
+      return 'bg-info';
+    }
+  }
+
   ngOnDestroy() {
     if (this.settingsSub) {
       this.settingsSub.unsubscribe();
