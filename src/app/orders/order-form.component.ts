@@ -38,6 +38,8 @@ export class OrderFormComponent implements OnInit, OnDestroy {
       deliveryAddress: ''
     };
 
+    // Если так, то не совсем понятно, зачем использовать addOrderSub
+    // Нет отписки
     this.sub.add(this.cartService
       .getSum()
       .subscribe(sum => (this.cartTotalSum = sum)));
