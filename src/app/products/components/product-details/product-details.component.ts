@@ -33,6 +33,7 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    // условие не обязательно, так как подписка создается в ngOnInit
     if (this.sub) {
       this.sub.unsubscribe();
     }

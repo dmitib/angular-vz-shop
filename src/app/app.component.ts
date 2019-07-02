@@ -23,6 +23,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.settingsSub = this.appSettings$.subscribe(s => (this.settings = s));
   }
 
+  // ок, но обычно название метода содержит глагол
   bgColor(): string {
     const color: string = this.settings.color;
 

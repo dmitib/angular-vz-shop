@@ -30,7 +30,8 @@ export class ManageProductsComponent implements OnInit, OnDestroy {
     this.sub = this.store
       .pipe(
         select(getProductEditComplete),
-        filter(editComplete => editComplete)
+        // желательно добавить тип
+        filter((editComplete: boolean) => editComplete)
       )
       .subscribe(() => this.store.dispatch(new act.GetProducts()));
 
@@ -38,6 +39,7 @@ export class ManageProductsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    // условие не обязательно
     if (this.sub) {
       this.sub.unsubscribe();
     }
