@@ -66,6 +66,8 @@ export class ProductsEffects {
   @Effect()
   deleteProduct$: Observable<Action> = this.actions$.pipe(
     ofType<act.DeleteProduct>(act.DELETE_PRODUCT),
+    // желательно указать тип для action, иначе получаем предупреждение, что payload может не существовать
+    // и выше тоже самое.
     concatMap(action =>
       this.productsService
         .deleteProduct(action.payload)
@@ -74,6 +76,8 @@ export class ProductsEffects {
     )
   );
 
+  // Насколько я понимаю, то делать это нет необходимости,
+  // та как данне есть в сторе и можно написать селектор для их отбора.
   @Effect()
   getProductFromUrl$: Observable<Action> = this.actions$.pipe(
     ofType<act.GetProductFromUrl>(act.GET_PRODUCT_FROM_URL),
